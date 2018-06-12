@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 
-readFile('ransom-note')
+readFile('data3')
 
 //This is an async function
 function readFile(dataFileName) {
@@ -73,12 +73,16 @@ function checkMagazine(magazine, note) {
         console.log(i, index, Object.keys(hash[index]), hash[index][hashKeys[i]], noteWord)
         if (hash[index][hashKeys[i]] == noteWord) {
             //console.log(hash[index][i])
-            delete hash[index][i]
-            //console.log(hash)
+            delete hash[index][hashKeys[i]]
+            console.log(hash[index])
             check = true;
+            break
         }         
       }
-      if (!check) return 'No2'
+      if (!check) {
+        //console.log(i, index, Object.keys(hash[index]), hash[index][hashKeys[i]], noteWord)
+        return 'No2'
+      }
     }       
   }
   return 'Yes'
@@ -87,7 +91,7 @@ function checkMagazine(magazine, note) {
 function hashIndex(word, arrayLength) {
   let wordInteger = Array.from(word).reduce((sum, letter) => {
         return sum + letter.charCodeAt(0)}, 0)
-  console.log(wordInteger)      
+  //console.log(wordInteger)      
   return wordInteger % arrayLength 
 }
    
