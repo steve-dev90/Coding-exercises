@@ -20,8 +20,9 @@ function main(inputString) {
     const magazine = readLine[1].split(' ')
 
     const note = readLine[2].split(' ')
-    
+
     console.log(checkMagazine(magazine, note))
+    
 }
 
 function checkMagazine1(magazine, note) {
@@ -41,51 +42,37 @@ function checkMagazine1(magazine, note) {
   return result  
 }
 
-
-//Convert each string in magazine to an integer using 'a'.charCodeAt(0)
-//With m slots assign each integer to a slot using modulus integer % m
-//Use object to deal with collisions
-//Convert each string in note to hash check if present. If present then move on if not return 
-
 function checkMagazine(magazine, note) {
 
-  var hash = Array(magazine.length*5).fill('') 
+  var hash = Array(magazine.length) 
   
   for (let magazineWord of magazine) {
-    let index = hashIndex(magazineWord, magazine.length*5)
-    //console.log(Object.keys(hash[index]))
-    let property = Object.keys(hash[index]).length ++
-    hash[index] = { ...hash[index], [property] : magazineWord }
-    //console.log(hash,index,property,magazine.length)
+    let index = hashIndex(magazineWord, magazine.length)
+    
+    if (hash[index] && magazineWord in hash[index]) {
+      hash[index][magazineWord] ++
+    } else {
+      hash[index] = { ...hash[index], [magazineWord]: 1 }
+    }
+
   } 
 
-  console.log('G',hash)
-
   for (let noteWord of note) { 
-    let index = hashIndex(noteWord, magazine.length*5)
-    let check = false
-    //console.log(index,magazine.length)
-    if (hash[index] === '') {
-      return 'No1'
+    let index = hashIndex(noteWord, magazine.length)
+
+    if (hash[index] && noteWord in hash[index]) {
+      hash[index][noteWord] --
+      if (hash[index][noteWord] < 1) {
+        delete hash[index][noteWord]
+      }
     } else {
-      let hashKeys = Object.keys(hash[index])   
-      for (var i = 0; i < hashKeys.length; i++ ) {
-        console.log(i, index, Object.keys(hash[index]), hash[index][hashKeys[i]], noteWord)
-        if (hash[index][hashKeys[i]] == noteWord) {
-            //console.log(hash[index][i])
-            delete hash[index][hashKeys[i]]
-            console.log(hash[index])
-            check = true;
-            break
-        }         
-      }
-      if (!check) {
-        //console.log(i, index, Object.keys(hash[index]), hash[index][hashKeys[i]], noteWord)
-        return 'No2'
-      }
-    }       
+      return 'No'
+    }
+
   }
+
   return 'Yes'
+
 }  
 
 function hashIndex(word, arrayLength) {
